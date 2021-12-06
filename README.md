@@ -30,7 +30,7 @@
 
 অর্থাৎ use    এর পরবর্তী শব্দের মাধ্যমে  আমরা সহজে  বুজতে  পারি যে সেটা  কোন বিষয়ের জন্য ব্যবহার করা হবে।  
 
-#### তাহলে এখন আমাদের সবার কমন ,  প্রশ্ন তা হলো Reducer  কি ? 
+#### তাহলে এখন আমাদের সবার কমন ,  প্রশ্ন তা হলো Reduce  কি ? 
 > Reduce  রিএক্ট এর কোনো কনসেপ্ট না।  এটি জাভাস্ক্রিপ্ট এর কনসেপ্ট।  আমাদের প্রথমে বুজতে হবে জাভাস্ক্রিপ্ট এর reduce বিষয়টা কি ? 
 > reduce শব্দের অর্থ ছোট করে নিয়ে আ।  array এর ভিতরে একাধিক এলিমেন্ট থাকে।  আর array এর একাধিক ভালুকে একটি ভ্যালু তে রূপান্তর   করার   কাজটা Array .Reduce   করে।  
 > Reduce ফাঙ্কশন এ দুটি প্যারামিটার থাকে।  একটি accumulator  এবং অন্যটি currentValue . 
@@ -38,8 +38,54 @@
 currentValue  হলো  Array তে  যখন Array .reduce ফাঙ্কশন কাজ করবে তখন যে  Array এলিমেন্ট নিয়ে কাজ করবে সেটা হলো currentValue . 
 Reduce ফাঙ্কশন এ accumulator এ ডিফল্ট  মান ০ থাকে।  কিন্তু reduce এ Accumulator এর ম্যান নির্দিষ্ট করে দেওয়া  যায়।   যেটা পরবর্তীতে ডিফল্ট ম্যান হিসেবে কাজ করে 
 
+### reduce  ও  useState এর পার্থক্য 
+![image ](./reduce.png)
+
 
 ### রিএক্ট এ useReducer ব্যবহার জিরার কনসেপ্ট হলো - 
 - শুরুতে আমাদের  কে useReducer হুক ইম্পোর্ট করে নিতে হবে।  
 - পরবর্তীতে আমাদের useReducer  এ দুটি  পেরামিটার (reducer, initializeState) হিসেবে ভ্যালু থাকে তা দিতে  হবে।
+- কম্পোনেন্ট ফাঙ্কশন এর  উর্পরে অর্থাৎ বয়লার প্লেট  এ  initializeState   এবং reduce  ফাঙ্কশন দিতে হবে।  
+- initializeState  এ ডিফল্ট হিসেবে নির্দিষ্ট ম্যান দিতে হবে।  
+- reduce এ দুটি পেরামিটার (state , action )   থাকে। 
+- অ্যাকশন বা  ইভেন্ট যখন কোনো ইভেন্ট ঘটে তখন আমাদের reduce এর action এ যখন  কোনো ইভেন্ট ঘটে তখন reducer এর স্টেট  পরিবর্তন হয়।  
+- Reduce ফাঙ্কশন  এ Switch  ব্যবহার করে Action  দিতে   হয়  
+- userReducer একটি Tuple  রিটার্ন করে।  
+- Tuple  এ   প্রথমে আমরা State  এর value   পাই এবং দ্বিতীয় তে স্টেট Action  করার জন্য Dispatch  পেয়ে থাকি।  
+#### Code  useReducer Hook use  simple  project 
+
+
+
+```javascript 
+import { useReducer } from 'react';
+
+const initialState = 5;
+const reducer = (state, action) => {
+    switch (action) {
+        case 'increment':
+            return state + 1;
+        case 'decrement':
+            return state - 1;
+        default:
+            return state;
+    }
+};
+
+export default function Counter() {
+    const [count, dispatch] = useReducer(reducer, initialState);
+    return (
+        <div>
+            <div>Count - {count}</div>
+            <button type="button" onClick={() => dispatch('increment')}>
+                Increment
+            </button>
+            <button type="button" onClick={() => dispatch('decrement')}>
+                Decrement
+            </button>
+        </div>
+    );
+}
+```
+
+
 
