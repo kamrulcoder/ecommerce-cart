@@ -38,7 +38,7 @@
 currentValue  হলো  Array তে  যখন Array .reduce ফাঙ্কশন কাজ করবে তখন যে  Array এলিমেন্ট নিয়ে কাজ করবে সেটা হলো currentValue . 
 Reduce ফাঙ্কশন এ accumulator এ ডিফল্ট  মান ০ থাকে।  কিন্তু reduce এ Accumulator এর ম্যান নির্দিষ্ট করে দেওয়া  যায়।   যেটা পরবর্তীতে ডিফল্ট ম্যান হিসেবে কাজ করে 
 
-### reduce  ও  useState এর পার্থক্য 
+### reduce  ও  useReducer  এর পার্থক্য 
 ![image ](./reduce.png)
 
 
