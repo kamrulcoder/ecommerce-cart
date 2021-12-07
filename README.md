@@ -1,6 +1,6 @@
 # [React Context API  and UserReducer  with Project](https://react-context-and-usereducer-project.netlify.app/)
 
-![Imag  not found ](./project-details-img/preview.png)
+![Imag  not found ](./preview.png)
 
 > এই প্রজেক্ট  মাধ্যমে  রিএক্ট কনটেক্সট এর   মুটামুটি বেসিক ধারণা লাভ করা যাবে। 
 
@@ -39,11 +39,11 @@ currentValue  হলো  Array তে  যখন Array .reduce ফাঙ্ক�
 Reduce ফাঙ্কশন এ accumulator এ ডিফল্ট  মান ০ থাকে।  কিন্তু reduce এ Accumulator এর ম্যান নির্দিষ্ট করে দেওয়া  যায়।   যেটা পরবর্তীতে ডিফল্ট ম্যান হিসেবে কাজ করে 
 
 ### reduce  ও  useReducer  এর পার্থক্য 
-![image ](./project-details-img/reduce.png)
+![image ](./reduce.png)
 
 
 ### useState   ও  useReducer কখন কোনটা ব্যবহার করবেন  
-![image ](./project-details-img/use-reducer.png)
+![image ](./use-reducer.png)
 
 
 ### রিএক্ট এ useReducer ব্যবহার জিরার কনসেপ্ট হলো - 
