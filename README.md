@@ -1,6 +1,6 @@
 # [React Context API  and UserReducer  with Project](https://react-context-and-usereducer-project.netlify.app/)
 
-![Imag  not found ](./preview.png)
+![Imag  not found ](./project-details-img/preview.png)
 
 > এই প্রজেক্ট  মাধ্যমে  রিএক্ট কনটেক্সট এর   মুটামুটি বেসিক ধারণা লাভ করা যাবে। 
 
@@ -39,7 +39,11 @@ currentValue  হলো  Array তে  যখন Array .reduce ফাঙ্ক�
 Reduce ফাঙ্কশন এ accumulator এ ডিফল্ট  মান ০ থাকে।  কিন্তু reduce এ Accumulator এর ম্যান নির্দিষ্ট করে দেওয়া  যায়।   যেটা পরবর্তীতে ডিফল্ট ম্যান হিসেবে কাজ করে 
 
 ### reduce  ও  useReducer  এর পার্থক্য 
-![image ](./reduce.png)
+![image ](./project-details-img/reduce.png)
+
+
+### useState   ও  useReducer কখন কোনটা ব্যবহার করবেন  
+![image ](./project-details-img/use-reducer.png)
 
 
 ### রিএক্ট এ useReducer ব্যবহার জিরার কনসেপ্ট হলো - 
@@ -82,6 +86,261 @@ export default function Counter() {
             <button type="button" onClick={() => dispatch('decrement')}>
                 Decrement
             </button>
+        </div>
+    );
+}
+```
+
+
+## Complex State Manage by useReducer 
+
+useReducer  এর  মাধ্যমে আমরা অবজেক্ট স্টেট   ম্যানেজ খুবই সহজে করতে  পারি।    অবজেক্ট স্টেট এবং  অবজেক্ট অ্যাকশন ব্যবহার করার নিয়ম নিম্নে উল্লেখ করা হলো - 
+
+- initialState    অবজেক্ট  আকারে ভ্যালু দিতে হবে 
+- Action  অবজেক্ট আকারে দিলে  dispatch  এ  অবজেক্ট হিসেবে  declaire  করতে হবে 
+-  একাধিক   initialState  থাকলে তাহলে শুরুতে mutable   করে  নিতে হবে 
+- স্টেট এর ভ্যালু গুলো get  করার   সময় স্টেট এর অবজেক্ট হিসেবে  করতে হবে 
+
+> ## Coplex State manage Code 
+
+ ```javascript 
+import { useReducer } from 'react';
+
+const initialState = {
+    counter: 0,
+    counter2: 0,
+};
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'increment':
+            return { ...state, counter: state.counter + action.value };
+        case 'decrement':
+            return { ...state, counter: state.counter - action.value };
+        case 'increment2':
+            return { ...state, counter2: state.counter2 + action.value };
+        case 'decrement2':
+            return { ...state, counter2: state.counter2 - action.value };
+        default:
+            return state;
+    }
+};
+
+export default function Counter() {
+    const [count, dispatch] = useReducer(reducer, initialState);
+    return (
+        <div>
+            <div>
+                <div>Count - {count.counter}</div>
+                <button
+                    type="button"
+                    onClick={() =>
+                        dispatch({
+                            type: 'increment',
+                            value: 1,
+                        })
+                    }
+                >
+                    Increment by 1
+                </button>
+                <button
+                    type="button"
+                    onClick={() =>
+                        dispatch({
+                            type: 'decrement',
+                            value: 1,
+                        })
+                    }
+                >
+                    Decrement by 1
+                </button>
+            </div>
+            <div>
+                <div>Count2 - {count.counter2}</div>
+                <button
+                    type="button"
+                    onClick={() =>
+                        dispatch({
+                            type: 'increment2',
+                            value: 1,
+                        })
+                    }
+                >
+                    Increment2 by 1
+                </button>
+                <button
+                    type="button"
+                    onClick={() =>
+                        dispatch({
+                            type: 'decrement2',
+                            value: 1,
+                        })
+                    }
+                >
+                    Decrement2 by 1
+                </button>
+            </div>
+        </div>
+    );
+```
+
+
+
+# useContext and useReducer   একসাথে ব্যবহার করার নিয়ম
+
+আমাদের কোনো ভ্যালু যদি গ্লোবাল স্টেট এ  রেখে দেয়  তখন  যেকোনো  কম্পোনেন্ট থেকে এই ডাটা আমরা এক্সেস পেতে [এরই কোনো ধরণের প্রপ্স ড্রিলিং  ছাড়াই।  তাই আমরা  রিএক্ট এর  context  api  ব্যবহার করি।  
+
+contetext  api   এবং useReducer  একসাথে ব্যবহার করতে চাই তাহলে যেভাবে ব্যবহার করতে হবে  তা নিম্নে দেওয়া হলো - 
+
+- শুরুতে   createContext   import  করে নিতে হবে 
+- তারপর আমাদের কে context  এর নাম দিয়ে তৈরি করে নিতে হবে
+- parent  এলিমেন্ট কে context  দ্বারা wrapper  করে দিতে হবে।  
+- context  এ ভ্যালু গুলো সেট করে দিতে হবে  
+### App.js 
+```javascript
+import React, { useReducer } from 'react';
+import ComponentA from './components/ComponentB';
+
+export const counterContext = React.createContext();
+
+const initialState = 0;
+const reducer = (state, action) => {
+    switch (action) {
+        case 'increment':
+            return state + 1;
+        case 'decrement':
+            return state - 1;
+        default:
+            return state;
+    }
+};
+
+export default function App() {
+    const [count, dispatch] = useReducer(reducer, initialState);
+    return (
+        <div className="app">
+            <div>Count: {count}</div>
+            <counterContext.Provider value={{ countDispatch: dispatch }}>
+                <ComponentA />
+            </counterContext.Provider>
+        </div>
+    );
+}
+
+```
+
+
+### CountView File 
+
+```javascript 
+import { useContext } from 'react';
+// eslint-disable-next-line import/no-cycle
+import { counterContext } from '../App';
+
+export default function ComponentA() {
+    const countContext = useContext(counterContext);
+
+    return (
+        <div>
+            <p>Component A</p>
+            <button type="button" onClick={() => countContext.countDispatch('increment')}>
+                Increment
+            </button>
+            <button type="button" onClick={() => countContext.countDispatch('decrement')}>
+                Decrement
+            </button>
+        </div>
+    );
+}
+```
+
+
+
+# Get Data use in useEffect Hook State Manage 
+
+# useState 
+
+```javascript
+import { useEffect, useState } from 'react';
+
+export default function GetPost() {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [post, setPost] = useState({});
+
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/posts/1')
+            .then((response) => response.json())
+            .then((data) => {
+                setLoading(false);
+                setPost(data);
+                setError('');
+            })
+            .catch(() => {
+                setLoading(false);
+                setPost({});
+                setError('There was a problem!');
+            });
+    }, []);
+
+    return (
+        <div>
+            {loading ? 'Loading....' : post.title}
+            {error || null}
+        </div>
+    );
+}
+
+```
+
+
+# useReducer
+
+```javascript
+import { useEffect, useReducer } from 'react';
+
+const initialState = {
+    loading: true,
+    error: '',
+    post: {},
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SUCCESS':
+            return {
+                loading: false,
+                post: action.result,
+                error: '',
+            };
+        case 'ERROR':
+            return {
+                loading: false,
+                post: {},
+                error: 'There was a problem fetching!',
+            };
+        default:
+            return state;
+    }
+};
+
+export default function GetPost2() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/posts/1')
+            .then((response) => response.json())
+            .then((data) => {
+                dispatch({ type: 'SUCCESS', result: data });
+            })
+            .catch(() => {
+                dispatch({ type: 'ERROR' });
+            });
+    }, []);
+
+    return (
+        <div>
+            {state.loading ? 'Loading....' : state.post.title}
+            {state.error || null}
         </div>
     );
 }
